@@ -4,134 +4,142 @@ local RedzLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/redz-
 -- สร้างหน้าต่างหลัก
 local Window = RedzLib:MakeWindow({
   Title = "IทwIจ้า Hub | Farm Edition",
-  SubTitle = "เวอร์ชันฟาร์มครบวงจร",
+  SubTitle = "ผู้นำฟาร์มครบวงจร",
   Script = {
     Name = "IทwIจ้า",
     Type = "Script"
   },
-  Icon = "rbxassetid://76698686353852" -- ไอคอนเทพเจ้า
+  Icon = "rbxassetid://76698686353852"
 })
 
--------------------------------------------------
+---------------------------------------------------------------------
 -- หน้าที่ 1: ฟาร์มหลัก (Main Farm)
--------------------------------------------------
-local Tab1 = Window:MakeTab({"1. ฟาร์มหลัก", "rbxassetid://76698686353852"})
+---------------------------------------------------------------------
+local Tab1 = Window:MakeTab({"1. ฟาร์มหลัก", "swords"})
 
 Tab1:AddToggle({
-  Name = "เปิดระบบฟาร์มเลเวลอัตโนมัติ",
+  Name = "ระบบเปิดฟาร์มอัตโนมัติ",
   Default = false,
   Callback = function(Value)
     _G.AutoFarm = Value
   end
 })
 
-Tab1:AddToggle({
-  Name = "เปิดระบบโจมตีรวดเร็วพิเศษ (Fast Attack)",
-  Default = false,
+Tab1:AddDropdown({
+  Name = "เลือกมอนสเตอร์เป้าหมาย",
+  Options = {"Bandit [Lv. 5]", "Desert Bandit [Lv. 60]", "Snow Bandit [Lv. 90]", "Factory Staff [Lv. 2200]"},
+  Default = "Bandit [Lv. 5]",
   Callback = function(Value)
-    _G.FastAttack = Value
+    _G.SelectedMob = Value
+  end
+})
+
+Tab1:AddDropdown({
+  Name = "เลือกอาวุธที่ใช้ฟาร์ม",
+  Options = {"Melee", "Sword", "Blox Fruit"},
+  Default = "Melee",
+  Callback = function(Value)
+    _G.SelectWeapon = Value
   end
 })
 
 Tab1:AddToggle({
-  Name = "เปิดระบบดึงมอนสเตอร์มารวม (Bring Mob)",
-  Default = false,
+  Name = "ดึงมอนสเตอร์มารวมกัน (Bring Mob)",
+  Default = true,
   Callback = function(Value)
     _G.BringMob = Value
   end
 })
 
--------------------------------------------------
--- หน้าที่ 2: ฟาร์มเฉพาะทาง (Special Farm)
--------------------------------------------------
-local Tab2 = Window:MakeTab({"2. ฟาร์มเฉพาะทาง", "rbxassetid://76698686353852"})
+Tab1:AddToggle({
+  Name = "ระบบโจมตีเร็ว/ตีไว (Fast Attack)",
+  Default = true,
+  Callback = function(Value)
+    _G.FastAttack = Value
+  end
+})
+
+---------------------------------------------------------------------
+-- หน้าที่ 2: ฟาร์มพิเศษ & วัสดุ (Special & Materials)
+---------------------------------------------------------------------
+local Tab2 = Window:MakeTab({"2. ฟาร์มพิเศษ/ของ", "star"})
+
+Tab2:AddToggle({
+  Name = "ฟาร์มมาสเตอรี่อาวุธ (Weapon Mastery)",
+  Default = false,
+  Callback = function(Value)
+    _G.FarmMasteryWeapon = Value
+  end
+})
+
+Tab2:AddToggle({
+  Name = "ฟาร์มมาสเตอรี่ผลปีศาจ (Fruit Mastery)",
+  Default = false,
+  Callback = function(Value)
+    _G.FarmMasteryFruit = Value
+  end
+})
 
 Tab2:AddDropdown({
-  Name = "เลือกสายที่ต้องการฟาร์มมาสเตอร์รี่",
-  Options = {"Melee (หมัด)", "Sword (ดาบ)", "Gun (ปืน)", "Blox Fruit (ผลปีศาจ)"},
-  Default = "Sword (ดาบ)",
+  Name = "เลือกวัตถุดิบที่ต้องการฟาร์ม",
+  Options = {"Bones (กระดูก)", "Ectoplasm", "Cocoa", "Dragon Scale", "Mystic Droplet"},
+  Default = "Bones (กระดูก)",
   Callback = function(Value)
-    _G.MasteryType = Value
+    _G.SelectedMaterial = Value
   end
 })
 
 Tab2:AddToggle({
-  Name = "เปิดระบบฟาร์มมาสเตอร์รี่",
+  Name = "เริ่มฟาร์มวัตถุดิบที่เลือก",
   Default = false,
   Callback = function(Value)
-    _G.AutoMastery = Value
+    _G.AutoFarmMaterial = Value
   end
 })
 
-Tab2:AddToggle({
-  Name = "เปิดระบบฟาร์มกระดูก (Haunted Castle)",
-  Default = false,
-  Callback = function(Value)
-    _G.AutoBones = Value
-  end
-})
-
-Tab2:AddDropdown({
-  Name = "เลือกวัตถุดิบทำของที่ต้องการฟาร์ม",
-  Options = {"Dragon Scale (เกล็ดมังกร)", "Fools Gold (ทองคำ)", "Shark Tooth (เขี้ยวฉลาม)", "Magma Ore (แร่ลาวา)", "Fish Tail (หางปลา)"},
-  Default = "Dragon Scale (เกล็ดมังกร)",
-  Callback = function(Value)
-    _G.MaterialType = Value
-  end
-})
-
-Tab2:AddToggle({
-  Name = "เปิดระบบฟาร์มวัตถุดิบอัตโนมัติ",
-  Default = false,
-  Callback = function(Value)
-    _G.AutoMaterials = Value
-  end
-})
-
--------------------------------------------------
--- หน้าที่ 3: ลงดันเจี้ยน (Raid System)
--------------------------------------------------
-local Tab3 = Window:MakeTab({"3. ลงดันเจี้ยน", "rbxassetid://76698686353852"})
+---------------------------------------------------------------------
+-- หน้าที่ 3: ระบบเรดดันเจี้ยน (Raid System)
+---------------------------------------------------------------------
+local Tab3 = Window:MakeTab({"3. ดันเจี้ยน/เรด", "shield"})
 
 Tab3:AddDropdown({
   Name = "เลือกชิปดันเจี้ยน",
-  Options = {"Flame (ไฟ)", "Ice (น้ำแข็ง)", "Light (แสง)", "Dark (ความมืด)", "Human: Buddha (พระ)", "Dough (โมจิ)"},
-  Default = "Flame (ไฟ)",
+  Options = {"Flame", "Ice", "Quake", "Light", "Dark", "Spider", "Rumble", "Dough"},
+  Default = "Flame",
   Callback = function(Value)
-    _G.SelectRaid = Value
+    _G.SelectedRaidChip = Value
   end
 })
 
 Tab3:AddButton({
-  Name = "กดซื้อชิปดันเจี้ยน",
+  Name = "ซื้อชิปอัตโนมัติ",
   Callback = function()
-    -- คำสั่งซื้อชิป
   end
 })
 
 Tab3:AddToggle({
-  Name = "เปิดระบบลงดันเจี้ยนปลอดภัย (ลอยสูงกันตาย)",
+  Name = "ระบบลงดันเจี้ยนออโต้ (Auto Raid)",
   Default = false,
   Callback = function(Value)
-    _G.SafeRaid = Value
+    _G.AutoRaid = Value
   end
 })
 
 Tab3:AddToggle({
-  Name = "เปิดระบบดึงมอนสลาย (Insta-Kill & Bring)",
+  Name = "ตื่นพลังผลไม้อัตโนมัติ (Auto Awaken)",
   Default = false,
   Callback = function(Value)
-    _G.InstaKillRaid = Value
+    _G.AutoAwaken = Value
   end
 })
 
--------------------------------------------------
--- หน้าที่ 4: อีเวนต์ทะเล (Sea Events)
--------------------------------------------------
-local Tab4 = Window:MakeTab({"4. อีเวนต์ทะเล", "rbxassetid://76698686353852"})
+---------------------------------------------------------------------
+-- หน้าที่ 4: กิจกรรมทางทะเล (Sea Events)
+---------------------------------------------------------------------
+local Tab4 = Window:MakeTab({"4. กิจกรรมทางทะเล", "waves"})
 
 Tab4:AddToggle({
-  Name = "เปิดระบบล่า Sea Beast & Terrorshark",
+  Name = "ล่าเรือจ้าว / ตีจ้าวทะเล (Sea Beast)",
   Default = false,
   Callback = function(Value)
     _G.AutoSeaBeast = Value
@@ -139,101 +147,87 @@ Tab4:AddToggle({
 })
 
 Tab4:AddToggle({
-  Name = "เปิดระบบล่าบอส Leviathan (เลเวียธาน)",
+  Name = "ล่าเรือผีสิง (Ghost Ship)",
   Default = false,
   Callback = function(Value)
-    _G.AutoLeviathan = Value
+    _G.AutoGhostShip = Value
   end
 })
 
 Tab4:AddToggle({
-  Name = "เปิดระบบล่าเรือผี (Ghost Ship)",
+  Name = "โจมตีฉลาม / Leviathan",
   Default = false,
   Callback = function(Value)
-    _G.AutoShipRaid = Value
+    _G.AutoKillShark = Value
   end
 })
 
--------------------------------------------------
--- หน้าที่ 5: เผ่า V4 & เกาะปริศนา (Race V4 & Mirage)
--------------------------------------------------
-local Tab5 = Window:MakeTab({"5. เผ่า V4 & เกาะปริศนา", "rbxassetid://76698686353852"})
+---------------------------------------------------------------------
+-- หน้าที่ 5: เผ่า V4 & เกาะมิราจ (Race V4 & Mirage)
+---------------------------------------------------------------------
+local Tab5 = Window:MakeTab({"5. เผ่า V4/มิราจ", "user"})
+
+Tab5:AddToggle({
+  Name = "วาร์ปไปเกาะมิราจ (Mirage Island)",
+  Default = false,
+  Callback = function(Value)
+    _G.TPMirage = Value
+  end
+})
 
 Tab5:AddButton({
-  Name = "วาร์ปไปเกาะ Mirage (เมื่อเกาะเกิด)",
+  Name = "มองหาเฟืองมิราจ (Find Gear)",
   Callback = function()
-    -- โค้ดวาร์ปไป Mirage Island
   end
 })
 
 Tab5:AddToggle({
-  Name = "เปิดระบบช่วยลง Trial (ห้องทดลองเผ่า)",
+  Name = "ทำเควสต์ V4 อัตโนมัติ (Auto Trial)",
   Default = false,
   Callback = function(Value)
-    _G.AutoTrial = Value
+    _G.AutoTrialV4 = Value
   end
 })
 
-Tab5:AddToggle({
-  Name = "เปิดใช้งานสกิลเผ่าอัตโนมัติ (Auto Race V4 Skill)",
-  Default = false,
-  Callback = function(Value)
-    _G.AutoV4Skill = Value
-  end
-})
-
--------------------------------------------------
+---------------------------------------------------------------------
 -- หน้าที่ 6: วาร์ป & ร้านค้า (Teleport & Shop)
--------------------------------------------------
-local Tab6 = Window:MakeTab({"6. วาร์ป & ร้านค้า", "rbxassetid://76698686353852"})
+---------------------------------------------------------------------
+local Tab6 = Window:MakeTab({"6. วาร์ป/ร้านค้า", "map-pin"})
 
 Tab6:AddDropdown({
-  Name = "เลือกเกาะที่ต้องการวาร์ปไป",
-  Options = {"เกาะเริ่มต้น", "เกาะจังเกิ้ล", "เกาะทะเลทราย", "เกาะหิมะ", "เกาะคฤหาสน์", "เกาะปราสาทเงา"},
-  Default = "เกาะเริ่มต้น",
+  Name = "เลือกเกาะที่ต้องการวาร์ป",
+  Options = {"Starter Island", "Marineford", "Impel Down", "Colosseum", "Mansion", "Castle on the Sea"},
+  Default = "Starter Island",
   Callback = function(Value)
-    _G.SelectIsland = Value
+    _G.SelectedIsland = Value
   end
 })
 
 Tab6:AddButton({
-  Name = "กดวาร์ปไปเกาะที่เลือก",
+  Name = "วาร์ปไปเกาะที่เลือก",
   Callback = function()
-    -- โค้ดสั่งวาร์ป
   end
 })
 
-Tab6:AddDropdown({
-  Name = "เลือกสเตตัสที่ต้องการอัปอัตโนมัติ",
-  Options = {"Melee (หมัด)", "Defense (เลือด)", "Sword (ดาบ)", "Gun (ปืน)", "Blox Fruit (ผลปีศาจ)"},
-  Default = "Melee (หมัด)",
-  Callback = function(Value)
-    _G.StatType = Value
+Tab6:AddButton({
+  Name = "ซื้อรูปแบบการต่อสู้ (Melee Shop)",
+  Callback = function()
   end
 })
 
-Tab6:AddToggle({
-  Name = "เปิดระบบอัปสเตตัสอัตโนมัติ (Auto Stats)",
-  Default = false,
-  Callback = function(Value)
-    _G.AutoStats = Value
-  end
-})
-
--------------------------------------------------
--- หน้าที่ 7: ผลปีศาจ & ของ (Fruits & Items)
--------------------------------------------------
-local Tab7 = Window:MakeTab({"7. ผลปีศาจ & ของ", "rbxassetid://76698686353852"})
+---------------------------------------------------------------------
+-- หน้าที่ 7: ผลไม้ & ไอเทม (Fruits & Items)
+---------------------------------------------------------------------
+local Tab7 = Window:MakeTab({"7. ผลไม้/ไอเทม", "cherry"})
 
 Tab7:AddButton({
-  Name = "กดสุ่มผลปีศาจ (Random Fruit)",
+  Name = "สุ่มผลไม้ (Random Fruit)",
   Callback = function()
-    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Cousin", "Buy")
   end
 })
 
 Tab7:AddToggle({
-  Name = "เปิดระบบเก็บผลเข้าคลังอัตโนมัติ (Auto Store)",
+  Name = "เก็บผลไม้ตกพื้นออโต้ (Auto Store Fruit)",
   Default = false,
   Callback = function(Value)
     _G.AutoStoreFruit = Value
@@ -241,51 +235,56 @@ Tab7:AddToggle({
 })
 
 Tab7:AddToggle({
-  Name = "เปิดระบบวาร์ปเก็บผลปีศาจตกบนพื้น",
+  Name = "มองเห็นตำแหน่งผลไม้ (Fruit ESP)",
   Default = false,
   Callback = function(Value)
-    _G.AutoGrabFruit = Value
+    _G.FruitESP = Value
   end
 })
 
--------------------------------------------------
--- หน้าที่ 8: ตัวละคร & ระบบเซฟ (Settings & Server)
--------------------------------------------------
-local Tab8 = Window:MakeTab({"8. ตัวละคร & ระบบเซฟ", "rbxassetid://76698686353852"})
-
-Tab8:AddSlider({
-  Name = "ปรับความเร็วการเดิน (WalkSpeed)",
-  Min = 16,
-  Max = 300,
-  Default = 16,
-  Callback = function(Value)
-    if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
-      game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
-    end
-  end
-})
+---------------------------------------------------------------------
+-- หน้าที่ 8: ตั้งค่า & ลดแลค (Settings & Optimization)
+---------------------------------------------------------------------
+local Tab8 = Window:MakeTab({"8. ตั้งค่า/ลดแลค", "settings"})
 
 Tab8:AddToggle({
-  Name = "เปิดระบบเดินทะลุกำแพง (Noclip)",
-  Default = false,
+  Name = "โหมดเดินทะลุสิ่งกีดขวาง (Noclip)",
+  Default = true,
   Callback = function(Value)
     _G.Noclip = Value
   end
 })
 
-Tab8:AddButton({
-  Name = "ลบเอฟเฟกต์ภาพ (ลดอาการกระตุก / กันเกมค้าง)",
-  Callback = function()
-    for _, v in pairs(game:GetService("Workspace"):GetDescendants()) do
-      if v:IsA("BasePart") then v.Material = Enum.Material.SmoothPlastic end
-      if v:IsA("Decal") or v:IsA("Texture") then v:Destroy() end
-    end
+Tab8:AddToggle({
+  Name = "เปิดโหมดลดการกระตุก (White Screen / Anti-Lag)",
+  Default = false,
+  Callback = function(Value)
+    _G.AntiLag = Value
   end
 })
 
 Tab8:AddButton({
-  Name = "ย้ายเซิร์ฟเวอร์หาคนน้อย (Server Hop)",
+  Name = "รีเซ็ตตัวละคร (Reset Character)",
   Callback = function()
-    -- โค้ด Server Hop
+    game.Players.LocalPlayer.Character.Humanoid.Health = 0
   end
 })
+
+---------------------------------------------------------------------
+-- ระบบทำงานเบื้องหลัง (Background Logic)
+---------------------------------------------------------------------
+spawn(function()
+  while task.wait() do
+    if _G.Noclip then
+      pcall(function()
+        if game.Players.LocalPlayer.Character then
+          for _, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+            if v:IsA("BasePart") then
+              v.CanCollide = false
+            end
+          end
+        end
+      end)
+    end
+  end
+end)
