@@ -1,290 +1,209 @@
--- โหลด UI Library (RedzLib V2)
-local RedzLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/redz-hub/RedzLibV2/main/Source.lua"))()
+-- =======================================================
+--  IทwIจ้า HUB - Standalone 8-Tab Custom UI
+-- =======================================================
 
--- สร้างหน้าต่างหลัก
-local Window = RedzLib:MakeWindow({
-  Title = "IทwIจ้า Hub | Farm Edition",
-  SubTitle = "ผู้นำฟาร์มครบวงจร",
-  Script = {
-    Name = "IทwIจ้า",
-    Type = "Script"
-  },
-  Icon = "rbxassetid://76698686353852"
-})
+-- ป้องกันการเปิด UI ซ้ำ
+if game:GetService("CoreGui"):FindFirstChild("InwJaoHubGui") then
+    game:GetService("CoreGui").InwJaoHubGui:Destroy()
+end
 
----------------------------------------------------------------------
--- หน้าที่ 1: ฟาร์มหลัก (Main Farm)
----------------------------------------------------------------------
-local Tab1 = Window:MakeTab({"1. ฟาร์มหลัก", "swords"})
+-- 1. ScreenGui หลัก
+local InwGui = Instance.new("ScreenGui")
+InwGui.Name = "InwJaoHubGui"
+InwGui.Parent = game:GetService("CoreGui")
 
-Tab1:AddToggle({
-  Name = "ระบบเปิดฟาร์มอัตโนมัติ",
-  Default = false,
-  Callback = function(Value)
-    _G.AutoFarm = Value
-  end
-})
+-- 2. Main Frame
+local MainFrame = Instance.new("Frame")
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = InwGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+MainFrame.BorderColor3 = Color3.fromRGB(255, 215, 0) -- ขอบทองเทพเจ้า
+MainFrame.BorderSizePixel = 2
+MainFrame.Position = UDim2.new(0.2, 0, 0.15, 0)
+MainFrame.Size = UDim2.new(0, 480, 0, 300)
+MainFrame.Active = true
+MainFrame.Draggable = true
 
-Tab1:AddDropdown({
-  Name = "เลือกมอนสเตอร์เป้าหมาย",
-  Options = {"Bandit [Lv. 5]", "Desert Bandit [Lv. 60]", "Snow Bandit [Lv. 90]", "Factory Staff [Lv. 2200]"},
-  Default = "Bandit [Lv. 5]",
-  Callback = function(Value)
-    _G.SelectedMob = Value
-  end
-})
+-- Title Bar
+local TitleBar = Instance.new("TextLabel")
+TitleBar.Parent = MainFrame
+TitleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+TitleBar.Size = UDim2.new(1, 0, 0, 35)
+TitleBar.Font = Enum.Font.SourceSansBold
+TitleBar.Text = "  ⚡ IทwIจ้า Hub | Custom 8-Tab Edition"
+TitleBar.TextColor3 = Color3.fromRGB(255, 215, 0)
+TitleBar.TextSize = 18
+TitleBar.TextXAlignment = Enum.TextXAlignment.Left
 
-Tab1:AddDropdown({
-  Name = "เลือกอาวุธที่ใช้ฟาร์ม",
-  Options = {"Melee", "Sword", "Blox Fruit"},
-  Default = "Melee",
-  Callback = function(Value)
-    _G.SelectWeapon = Value
-  end
-})
-
-Tab1:AddToggle({
-  Name = "ดึงมอนสเตอร์มารวมกัน (Bring Mob)",
-  Default = true,
-  Callback = function(Value)
-    _G.BringMob = Value
-  end
-})
-
-Tab1:AddToggle({
-  Name = "ระบบโจมตีเร็ว/ตีไว (Fast Attack)",
-  Default = true,
-  Callback = function(Value)
-    _G.FastAttack = Value
-  end
-})
-
----------------------------------------------------------------------
--- หน้าที่ 2: ฟาร์มพิเศษ & วัสดุ (Special & Materials)
----------------------------------------------------------------------
-local Tab2 = Window:MakeTab({"2. ฟาร์มพิเศษ/ของ", "star"})
-
-Tab2:AddToggle({
-  Name = "ฟาร์มมาสเตอรี่อาวุธ (Weapon Mastery)",
-  Default = false,
-  Callback = function(Value)
-    _G.FarmMasteryWeapon = Value
-  end
-})
-
-Tab2:AddToggle({
-  Name = "ฟาร์มมาสเตอรี่ผลปีศาจ (Fruit Mastery)",
-  Default = false,
-  Callback = function(Value)
-    _G.FarmMasteryFruit = Value
-  end
-})
-
-Tab2:AddDropdown({
-  Name = "เลือกวัตถุดิบที่ต้องการฟาร์ม",
-  Options = {"Bones (กระดูก)", "Ectoplasm", "Cocoa", "Dragon Scale", "Mystic Droplet"},
-  Default = "Bones (กระดูก)",
-  Callback = function(Value)
-    _G.SelectedMaterial = Value
-  end
-})
-
-Tab2:AddToggle({
-  Name = "เริ่มฟาร์มวัตถุดิบที่เลือก",
-  Default = false,
-  Callback = function(Value)
-    _G.AutoFarmMaterial = Value
-  end
-})
-
----------------------------------------------------------------------
--- หน้าที่ 3: ระบบเรดดันเจี้ยน (Raid System)
----------------------------------------------------------------------
-local Tab3 = Window:MakeTab({"3. ดันเจี้ยน/เรด", "shield"})
-
-Tab3:AddDropdown({
-  Name = "เลือกชิปดันเจี้ยน",
-  Options = {"Flame", "Ice", "Quake", "Light", "Dark", "Spider", "Rumble", "Dough"},
-  Default = "Flame",
-  Callback = function(Value)
-    _G.SelectedRaidChip = Value
-  end
-})
-
-Tab3:AddButton({
-  Name = "ซื้อชิปอัตโนมัติ",
-  Callback = function()
-  end
-})
-
-Tab3:AddToggle({
-  Name = "ระบบลงดันเจี้ยนออโต้ (Auto Raid)",
-  Default = false,
-  Callback = function(Value)
-    _G.AutoRaid = Value
-  end
-})
-
-Tab3:AddToggle({
-  Name = "ตื่นพลังผลไม้อัตโนมัติ (Auto Awaken)",
-  Default = false,
-  Callback = function(Value)
-    _G.AutoAwaken = Value
-  end
-})
-
----------------------------------------------------------------------
--- หน้าที่ 4: กิจกรรมทางทะเล (Sea Events)
----------------------------------------------------------------------
-local Tab4 = Window:MakeTab({"4. กิจกรรมทางทะเล", "waves"})
-
-Tab4:AddToggle({
-  Name = "ล่าเรือจ้าว / ตีจ้าวทะเล (Sea Beast)",
-  Default = false,
-  Callback = function(Value)
-    _G.AutoSeaBeast = Value
-  end
-})
-
-Tab4:AddToggle({
-  Name = "ล่าเรือผีสิง (Ghost Ship)",
-  Default = false,
-  Callback = function(Value)
-    _G.AutoGhostShip = Value
-  end
-})
-
-Tab4:AddToggle({
-  Name = "โจมตีฉลาม / Leviathan",
-  Default = false,
-  Callback = function(Value)
-    _G.AutoKillShark = Value
-  end
-})
-
----------------------------------------------------------------------
--- หน้าที่ 5: เผ่า V4 & เกาะมิราจ (Race V4 & Mirage)
----------------------------------------------------------------------
-local Tab5 = Window:MakeTab({"5. เผ่า V4/มิราจ", "user"})
-
-Tab5:AddToggle({
-  Name = "วาร์ปไปเกาะมิราจ (Mirage Island)",
-  Default = false,
-  Callback = function(Value)
-    _G.TPMirage = Value
-  end
-})
-
-Tab5:AddButton({
-  Name = "มองหาเฟืองมิราจ (Find Gear)",
-  Callback = function()
-  end
-})
-
-Tab5:AddToggle({
-  Name = "ทำเควสต์ V4 อัตโนมัติ (Auto Trial)",
-  Default = false,
-  Callback = function(Value)
-    _G.AutoTrialV4 = Value
-  end
-})
-
----------------------------------------------------------------------
--- หน้าที่ 6: วาร์ป & ร้านค้า (Teleport & Shop)
----------------------------------------------------------------------
-local Tab6 = Window:MakeTab({"6. วาร์ป/ร้านค้า", "map-pin"})
-
-Tab6:AddDropdown({
-  Name = "เลือกเกาะที่ต้องการวาร์ป",
-  Options = {"Starter Island", "Marineford", "Impel Down", "Colosseum", "Mansion", "Castle on the Sea"},
-  Default = "Starter Island",
-  Callback = function(Value)
-    _G.SelectedIsland = Value
-  end
-})
-
-Tab6:AddButton({
-  Name = "วาร์ปไปเกาะที่เลือก",
-  Callback = function()
-  end
-})
-
-Tab6:AddButton({
-  Name = "ซื้อรูปแบบการต่อสู้ (Melee Shop)",
-  Callback = function()
-  end
-})
-
----------------------------------------------------------------------
--- หน้าที่ 7: ผลไม้ & ไอเทม (Fruits & Items)
----------------------------------------------------------------------
-local Tab7 = Window:MakeTab({"7. ผลไม้/ไอเทม", "cherry"})
-
-Tab7:AddButton({
-  Name = "สุ่มผลไม้ (Random Fruit)",
-  Callback = function()
-  end
-})
-
-Tab7:AddToggle({
-  Name = "เก็บผลไม้ตกพื้นออโต้ (Auto Store Fruit)",
-  Default = false,
-  Callback = function(Value)
-    _G.AutoStoreFruit = Value
-  end
-})
-
-Tab7:AddToggle({
-  Name = "มองเห็นตำแหน่งผลไม้ (Fruit ESP)",
-  Default = false,
-  Callback = function(Value)
-    _G.FruitESP = Value
-  end
-})
-
----------------------------------------------------------------------
--- หน้าที่ 8: ตั้งค่า & ลดแลค (Settings & Optimization)
----------------------------------------------------------------------
-local Tab8 = Window:MakeTab({"8. ตั้งค่า/ลดแลค", "settings"})
-
-Tab8:AddToggle({
-  Name = "โหมดเดินทะลุสิ่งกีดขวาง (Noclip)",
-  Default = true,
-  Callback = function(Value)
-    _G.Noclip = Value
-  end
-})
-
-Tab8:AddToggle({
-  Name = "เปิดโหมดลดการกระตุก (White Screen / Anti-Lag)",
-  Default = false,
-  Callback = function(Value)
-    _G.AntiLag = Value
-  end
-})
-
-Tab8:AddButton({
-  Name = "รีเซ็ตตัวละคร (Reset Character)",
-  Callback = function()
-    game.Players.LocalPlayer.Character.Humanoid.Health = 0
-  end
-})
-
----------------------------------------------------------------------
--- ระบบทำงานเบื้องหลัง (Background Logic)
----------------------------------------------------------------------
-spawn(function()
-  while task.wait() do
-    if _G.Noclip then
-      pcall(function()
-        if game.Players.LocalPlayer.Character then
-          for _, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-            if v:IsA("BasePart") then
-              v.CanCollide = false
-            end
-          end
-        end
-      end)
-    end
-  end
+-- ปุ่มปิด UI
+local CloseBtn = Instance.new("TextButton")
+CloseBtn.Parent = TitleBar
+CloseBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+CloseBtn.Position = UDim2.new(1, -30, 0.15, 0)
+CloseBtn.Size = UDim2.new(0, 25, 0, 25)
+CloseBtn.Font = Enum.Font.SourceSansBold
+CloseBtn.Text = "X"
+CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+CloseBtn.TextSize = 14
+CloseBtn.MouseButton1Click:Connect(function()
+    InwGui:Destroy()
 end)
+
+-- แถบเมนูด้านซ้าย (Tab List Holder)
+local TabBar = Instance.new("ScrollingFrame")
+TabBar.Parent = MainFrame
+TabBar.BackgroundColor3 = Color3.fromRGB(25, 25, 32)
+TabBar.Position = UDim2.new(0, 5, 0, 40)
+TabBar.Size = UDim2.new(0, 130, 1, -45)
+TabBar.CanvasSize = UDim2.new(0, 0, 0, 330)
+TabBar.ScrollBarThickness = 3
+
+local TabUIList = Instance.new("UIListLayout")
+TabUIList.Parent = TabBar
+TabUIList.Padding = UDim.new(0, 4)
+
+-- พื้นที่แสดงเนื้อหาด้านขวา (Content Holder)
+local ContentArea = Instance.new("Frame")
+ContentArea.Parent = MainFrame
+ContentArea.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+ContentArea.Position = UDim2.new(0, 140, 0, 40)
+ContentArea.Size = UDim2.new(1, -145, 1, -45)
+
+---------------------------------------------------------------------
+-- ระบบจัดการแท็บ (Tab Engine)
+---------------------------------------------------------------------
+local TabFrames = {}
+
+local function CreateTab(tabName)
+    local TabBtn = Instance.new("TextButton")
+    TabBtn.Parent = TabBar
+    TabBtn.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+    TabBtn.Size = UDim2.new(1, -5, 0, 35)
+    TabBtn.Font = Enum.Font.SourceSans
+    TabBtn.Text = tabName
+    TabBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
+    TabBtn.TextSize = 14
+
+    local PageFrame = Instance.new("ScrollingFrame")
+    PageFrame.Parent = ContentArea
+    PageFrame.Size = UDim2.new(1, -10, 1, -10)
+    PageFrame.Position = UDim2.new(0, 5, 0, 5)
+    PageFrame.BackgroundTransparency = 1
+    PageFrame.Visible = false
+    PageFrame.ScrollBarThickness = 4
+
+    local PageList = Instance.new("UIListLayout")
+    PageList.Parent = PageFrame
+    PageList.Padding = UDim.new(0, 6)
+
+    table.insert(TabFrames, PageFrame)
+
+    TabBtn.MouseButton1Click:Connect(function()
+        for _, f in pairs(TabFrames) do f.Visible = false end
+        PageFrame.Visible = true
+    end)
+
+    return PageFrame
+end
+
+-- ฟังก์ชันสร้างปุ่ม Toggle
+local function AddToggle(parent, text, defaultState, callback)
+    local Btn = Instance.new("TextButton")
+    Btn.Parent = parent
+    Btn.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+    Btn.Size = UDim2.new(1, -10, 0, 32)
+    Btn.Font = Enum.Font.SourceSansBold
+    Btn.TextSize = 14
+    
+    local state = defaultState
+    local function updateText()
+        if state then
+            Btn.Text = text .. " : [ ON ]"
+            Btn.TextColor3 = Color3.fromRGB(100, 255, 100)
+        else
+            Btn.Text = text .. " : [ OFF ]"
+            Btn.TextColor3 = Color3.fromRGB(255, 100, 100)
+        end
+    end
+    
+    updateText()
+    Btn.MouseButton1Click:Connect(function()
+        state = not state
+        updateText()
+        callback(state)
+    end)
+end
+
+---------------------------------------------------------------------
+-- สร้างทั้ง 8 หน้า (8 Tabs)
+---------------------------------------------------------------------
+local Tab1 = CreateTab("1. ฟาร์มหลัก")
+local Tab2 = CreateTab("2. ฟาร์มพิเศษ")
+local Tab3 = CreateTab("3. ดันเจี้ยน/เรด")
+local Tab4 = CreateTab("4. กิจกรรมทะเล")
+local Tab5 = CreateTab("5. เผ่า V4/มิราจ")
+local Tab6 = CreateTab("6. วาร์ป/ร้านค้า")
+local Tab7 = CreateTab("7. ผลไม้/ไอเทม")
+local Tab8 = CreateTab("8. ตั้งค่า/ลดแลค")
+
+-- แสดงหน้าแรกไว้ก่อน
+TabFrames[1].Visible = true
+
+---------------------------------------------------------------------
+-- ใส่ฟังค์ชันลงในแต่ละหน้า
+---------------------------------------------------------------------
+
+-- หน้าที่ 1: ฟาร์มหลัก
+AddToggle(Tab1, "ระบบฟาร์มอัตโนมัติ", false, function(v) _G.AutoFarm = v end)
+AddToggle(Tab1, "ดึงมอนมารวม (Bring Mob)", true, function(v) _G.BringMob = v end)
+AddToggle(Tab1, "โจมตีเร็ว (Fast Attack)", true, function(v) _G.FastAttack = v end)
+
+-- หน้าที่ 2: ฟาร์มพิเศษ
+AddToggle(Tab2, "ฟาร์มมาสเตอรี่อาวุธ", false, function(v) _G.MasteryWeapon = v end)
+AddToggle(Tab2, "ฟาร์มกระดูก (Bones)", false, function(v) _G.FarmBones = v end)
+
+-- หน้าที่ 3: ดันเจี้ยน
+AddToggle(Tab3, "ลงดันเจี้ยนออโต้ (Auto Raid)", false, function(v) _G.AutoRaid = v end)
+AddToggle(Tab3, "ตื่นพลังผลไม้ออโต้", false, function(v) _G.AutoAwaken = v end)
+
+-- หน้าที่ 4: กิจกรรมทะเล
+AddToggle(Tab4, "ล่าเรือจ้าว / จ้าวทะเล", false, function(v) _G.AutoSeaBeast = v end)
+AddToggle(Tab4, "ล่าเรือผีสิง", false, function(v) _G.AutoGhostShip = v end)
+
+-- หน้าที่ 5: เผ่า V4
+AddToggle(Tab5, "วาร์ปไปเกาะมิราจ", false, function(v) _G.TPMirage = v end)
+AddToggle(Tab5, "ทำเควสต์ V4 อัตโนมัติ", false, function(v) _G.AutoTrialV4 = v end)
+
+-- หน้าที่ 6: วาร์ป/ร้านค้า
+AddToggle(Tab6, "วาร์ปไปเกาะ Starter", false, function(v) end)
+
+-- หน้าที่ 7: ผลไม้
+AddToggle(Tab7, "เก็บผลไม้ตกพื้นออโต้", false, function(v) _G.AutoStoreFruit = v end)
+AddToggle(Tab7, "มองเห็นตำแหน่งผลไม้ (ESP)", false, function(v) _G.FruitESP = v end)
+
+-- หน้าที่ 8: ตั้งค่า
+AddToggle(Tab8, "เดินทะลุสิ่งกีดขวาง (Noclip)", true, function(v) _G.Noclip = v end)
+
+-- ระบบ Noclip ทำงานเบื้องหลัง
+spawn(function()
+    while task.wait() do
+        if _G.Noclip then
+            pcall(function()
+                if game.Players.LocalPlayer.Character then
+                    for _, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                        if v:IsA("BasePart") then
+                            v.CanCollide = false
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+
+-- แจ้งเตือนเมื่อโหลดสำเร็จ
+game:GetService("StarterGui"):SetCore("SendNotification", {
+    Title = "IทwIจ้า Hub",
+    Text = "โหลด UI แบบ 8 หน้าสำเร็จแล้ว!",
+    Duration = 5
+})
